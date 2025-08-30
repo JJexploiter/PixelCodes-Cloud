@@ -1,0 +1,95 @@
+-- PixelCode++ (Script Cloud)
+-- by JJexploiter
+luan_super122 / Pixeldude9
+
+local CoreGui = game:GetService("CoreGui")
+
+-- GUI principal
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "PixelCodeGUI"
+ScreenGui.Parent = CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 300, 0, 350)
+Frame.Position = UDim2.new(0.35, 0, 0.2, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Frame.Parent = ScreenGui
+Frame.Active = true
+Frame.Draggable = true
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = Frame
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = "PixelCode++"
+Title.TextColor3 = Color3.fromRGB(0, 255, 140)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 24
+Title.Parent = Frame
+
+-- Console de saída (fake)
+local Console = Instance.new("TextLabel")
+Console.Size = UDim2.new(1, -20, 0, 120)
+Console.Position = UDim2.new(0, 10, 0, 50)
+Console.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Console.TextColor3 = Color3.fromRGB(0, 255, 0)
+Console.TextXAlignment = Enum.TextXAlignment.Left
+Console.TextYAlignment = Enum.TextYAlignment.Top
+Console.Text = "PixelCode++ Console Ready...\n"
+Console.Font = Enum.Font.Code
+Console.TextSize = 16
+Console.ClipsDescendants = true
+Console.TextWrapped = true
+Console.TextStrokeTransparency = 0.8
+Console.Parent = Frame
+
+-- Botão de inject fake
+local InjectButton = Instance.new("TextButton")
+InjectButton.Size = UDim2.new(0, 120, 0, 30)
+InjectButton.Position = UDim2.new(0, 10, 0, 180)
+InjectButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+InjectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+InjectButton.Text = "Inject"
+InjectButton.Font = Enum.Font.SourceSansBold
+InjectButton.TextSize = 18
+InjectButton.Parent = Frame
+
+InjectButton.MouseButton1Click:Connect(function()
+    Console.Text = Console.Text .. "\nInjecting..."
+    task.wait(2)
+    Console.Text = Console.Text .. "\nSuccessfully Injected!"
+end)
+
+-- Função para criar botões da cloud
+local function createButton(name, url, yPos)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 260, 0, 30)
+    btn.Position = UDim2.new(0, 20, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Text = name
+    btn.Font = Enum.Font.SourceSans
+    btn.TextSize = 16
+    btn.Parent = Frame
+    
+    btn.MouseButton1Click:Connect(function()
+        Console.Text = Console.Text .. "\nInjecting " .. name .. "..."
+        local success, err = pcall(function()
+            local scriptCode = game:HttpGet(url)
+            loadstring(scriptCode)()
+        end)
+        if success then
+            Console.Text = Console.Text .. "\n" .. name .. " Successfully Injected!"
+        else
+            Console.Text = Console.Text .. "\nError loading " .. name .. ": " .. err
+        end
+    end)
+end
+
+-- Exemplos de scripts na “cloud”
+createButton("Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", 220)
+createButton("CMD-X", "https://raw.githubusercontent.com/CMD-X/CMD-X/master/CMD-X", 260)
+createButton("Dex Explorer", "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua", 300)
